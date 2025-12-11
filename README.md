@@ -362,28 +362,6 @@ http://localhost:5000/api/documents
 
 ### Test Scenario: Full CRUD Operations
 
-```bash
-# 1. List current documents
-curl -X GET http://localhost:5000/api/documents
-
-# 2. Upload a PDF
-curl -X POST http://localhost:5000/api/documents/upload \
-  -F "file=@prescription.pdf"
-# Note the returned ID (e.g., id: 5)
-
-# 3. List documents again (should show new document)
-curl -X GET http://localhost:5000/api/documents
-
-# 4. Download the document (replace 5 with actual ID)
-curl -X GET http://localhost:5000/api/documents/5 -o my_file.pdf
-
-# 5. Delete the document
-curl -X DELETE http://localhost:5000/api/documents/5
-
-# 6. Verify deletion
-curl -X GET http://localhost:5000/api/documents
-```
-
 ### Using Postman Collection
 
 1. Create a new Postman collection
