@@ -1,4 +1,4 @@
-# Healzo - Medical Document Management System
+# Healzo - Patient Portal
 
 ## Comprehensive Design Documentation
 
