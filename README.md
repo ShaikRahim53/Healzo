@@ -1,4 +1,4 @@
-# Healzo - Patient Portal
+# Healzo - Patient Por
 
 A full-stack web application for managing patient medical documents (PDFs) with upload, download, and deletion capabilities.
 
@@ -218,8 +218,8 @@ http://localhost:5000/api/documents
 
 ### Endpoints Summary
 
-| Method   | Endpoint  | Description                  |
-| -------- | --------- | ---------------------------- |
+| Method     | Endpoint    | Description                  |
+| ---------- | ----------- | ---------------------------- |
 | `POST`   | `/upload` | Upload a PDF document        |
 | `GET`    | `/`       | List all documents           |
 | `GET`    | `/:id`    | Download a specific document |
@@ -372,7 +372,6 @@ Using Postman Collection
    - **GET** - List Documents
    - **GET** - Download Document (use variable {{doc_id}})
    - **DELETE** - Delete Document (use variable {{doc_id}})
-
 3. In upload response, extract ID: `Tests` tab:
 
 ```javascript
@@ -386,8 +385,8 @@ pm.environment.set("doc_id", jsonData.document.id);
 
 ## 📋 File Size and Type Limits
 
-| Limit             | Value    | Description                 |
-| ----------------- | -------- | --------------------------- |
+| Limit                   | Value    | Description                 |
+| ----------------------- | -------- | --------------------------- |
 | **Max File Size** | 50 MB    | Prevents storage exhaustion |
 | **Allowed Type**  | PDF only | application/pdf MIME type   |
 | **Min File Size** | 1 KB     | Practical minimum           |
