@@ -103,6 +103,120 @@ CREATE TABLE documents (
 
 ---
 
+### Local Development - Database Setup
+
+This section explains how to configure PostgreSQL so other developers can run the application locally. It includes quick commands for Windows (cmd), macOS/Linux, and a sample `.env` file.
+
+1. Install PostgreSQL
+
+- **Windows (recommended)**: download installer from https://www.postgresql.org/download/windows/ and follow the installer. During install, note the Postgres user (default: `postgres`) and password you set.
+- **Windows (chocolatey)**: if you use Chocolatey, run in an elevated `cmd.exe`:
+
+```bat
+choco install postgresql
+```
+
+- **macOS (Homebrew)**:
+
+```bash
+brew install postgresql
+brew services start postgresql
+```
+
+- **Ubuntu / Debian**:
+
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+sudo systemctl start postgresql
+```
+
+2. Create a database and user (psql)
+
+- Open a terminal and run the interactive psql shell as the `postgres` user (Windows: use pgAdmin or the SQL Shell (psql) that was installed):
+
+Windows (cmd.exe):
+
+```bat
+psql -U postgres
+```
+
+macOS / Linux:
+
+```bash
+sudo -u postgres psql
+```
+
+- In `psql`, run (replace `healzo_user` / `healzo_db` / `your_password` with your values):
+
+```sql
+CREATE USER healzo_user WITH PASSWORD 'your_password';
+CREATE DATABASE healzo_db OWNER healzo_user;
+GRANT ALL PRIVILEGES ON DATABASE healzo_db TO healzo_user;
+\q
+```
+
+3. Create the `documents` table
+
+If you used the SQL above, connect to the `healzo_db` database and run the table creation SQL (same as shown above):
+
+```bash
+psql -U healzo_user -d healzo_db -h localhost -W
+-- paste the CREATE TABLE statement here (or run the SQL file)
+```
+
+4. Configure environment variables for the backend
+
+Create a `.env` file in the `backend/` folder (do NOT commit real secrets). Here's a safe example file named `.env.example` (we provide this file in the repo):
+
+```
+# backend/.env.example
+DB_USER=healzo_user
+DB_HOST=localhost
+DB_NAME=healzo_db
+DB_PASSWORD=your_password_here
+DB_PORT=5432
+PORT=5000
+```
+
+Copy `.env.example` to `.env` and update the values with the credentials you created.
+
+5. Run the backend locally
+
+Open `cmd.exe` in `e:\reactjs\Healzo\backend` and run:
+
+```bat
+npm install
+set NODE_ENV=development
+set DB_USER=healzo_user
+set DB_HOST=localhost
+set DB_NAME=healzo_db
+set DB_PASSWORD=your_password_here
+set DB_PORT=5432
+npm run dev
+```
+
+On PowerShell use `$env:DB_USER = 'healzo_user'` style or just copy `.env` file and let the backend load it with `dotenv`.
+
+6. Quick verification
+
+- Visit the backend health route (if available) or try the GET documents endpoint:
+
+```bash
+curl http://localhost:5000/api/documents
+```
+
+You should get a JSON response (empty array at first) or the server will return helpful error messages about DB connectivity.
+
+7. GUI option
+
+- You can use **pgAdmin**, **DBeaver**, or **TablePlus** to connect to `localhost:5432` with the user `healzo_user` and verify the `documents` table exists and is empty.
+
+Notes:
+
+- If you plan to share the repo, include the `backend/.env.example` file and instruct contributors to copy it to `.env` and fill values.
+- The `backend/db.js` file reads environment variables; confirm your `.env` keys match (`DB_USER`, `DB_HOST`, `DB_NAME`, `DB_PASSWORD`, `DB_PORT`).
+
 ### Q4: If you were to support 1,000 users, what changes would you consider?
 
 **Answer: 10 Major Changes Needed**
@@ -1617,20 +1731,20 @@ If Primary fails:
 
 ### **Summary Table**
 
-| #  | Assumption             | Severity    | Impact                    | Fix Timeline |
-| -- | ---------------------- | ----------- | ------------------------- | ------------ |
-| 1  | 50MB file limit        | Low         | Can't upload huge scans   | 1 day        |
-| 2  | PDF only               | Low         | Can't upload images       | 1 day        |
-| 3  | No authentication      | 🔴 CRITICAL | Security disaster         | 2 weeks      |
-| 4  | Single server          | High        | Can't scale to 1000 users | 2 weeks      |
-| 5  | Minimal metadata       | Medium      | Can't track documents     | 1 week       |
-| 6  | Local storage          | High        | Limited to disk size      | 3 days       |
-| 7  | No rate limiting       | Medium      | Vulnerable to abuse       | 2 days       |
-| 8  | No encryption          | 🔴 CRITICAL | Patient data exposed      | 1 week       |
-| 9  | No backups             | 🔴 CRITICAL | Data loss risk            | 3 days       |
-| 10 | No monitoring          | Medium      | No visibility             | 1 week       |
-| 11 | Documents never expire | Low         | Disk fills up slowly      | 1 week       |
-| 12 | Single database        | 🔴 CRITICAL | No redundancy             | 1 week       |
+| #   | Assumption             | Severity    | Impact                    | Fix Timeline |
+| --- | ---------------------- | ----------- | ------------------------- | ------------ |
+| 1   | 50MB file limit        | Low         | Can't upload huge scans   | 1 day        |
+| 2   | PDF only               | Low         | Can't upload images       | 1 day        |
+| 3   | No authentication      | 🔴 CRITICAL | Security disaster         | 2 weeks      |
+| 4   | Single server          | High        | Can't scale to 1000 users | 2 weeks      |
+| 5   | Minimal metadata       | Medium      | Can't track documents     | 1 week       |
+| 6   | Local storage          | High        | Limited to disk size      | 3 days       |
+| 7   | No rate limiting       | Medium      | Vulnerable to abuse       | 2 days       |
+| 8   | No encryption          | 🔴 CRITICAL | Patient data exposed      | 1 week       |
+| 9   | No backups             | 🔴 CRITICAL | Data loss risk            | 3 days       |
+| 10  | No monitoring          | Medium      | No visibility             | 1 week       |
+| 11  | Documents never expire | Low         | Disk fills up slowly      | 1 week       |
+| 12  | Single database        | 🔴 CRITICAL | No redundancy             | 1 week       |
 
 ---
 
@@ -2144,8 +2258,8 @@ CREATE TABLE documents (
 
 ### Schema Details
 
-| Column         | Type         | Constraints               | Purpose                       |
-| -------------- | ------------ | ------------------------- | ----------------------------- |
+| Column       | Type         | Constraints               | Purpose                       |
+| ------------ | ------------ | ------------------------- | ----------------------------- |
 | `id`         | SERIAL       | PRIMARY KEY               | Unique identifier             |
 | `filename`   | VARCHAR(255) | NOT NULL                  | Original uploaded filename    |
 | `filepath`   | VARCHAR(500) | NOT NULL                  | Absolute path to file on disk |
