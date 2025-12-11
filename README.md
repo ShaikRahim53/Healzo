@@ -47,7 +47,6 @@ Healzo/
 │   ├── tailwind.config.js
 │   └── index.html
 ├── design.md                          # System design document
-├── DOCUMENTATION.md                   # Technical documentation
 └── README.md                          # This file
 ```
 
