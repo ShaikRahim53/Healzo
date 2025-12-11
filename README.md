@@ -7,7 +7,7 @@ A full-stack web application for managing patient medical documents (PDFs) with 
 - [Features](#features)
 - [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
-- [Installation & Setup](#installation--setup)
+- [Installation &amp; Setup](#installation--setup)
 - [Running the Application](#running-the-application)
 - [API Documentation](#api-documentation)
 - [Example API Calls](#example-api-calls)
@@ -30,7 +30,7 @@ A full-stack web application for managing patient medical documents (PDFs) with 
 Healzo/
 ├── backend/
 │   ├── routes/
-│   │   └── documentRoutes.js          # Document API endpoints
+│   |  └── documentRoutes.js          # Document API endpoints
 │   ├── db.js                          # PostgreSQL connection
 │   ├── index.js                       # Express server
 │   ├── package.json
@@ -46,7 +46,8 @@ Healzo/
 │   ├── vite.config.js
 │   ├── tailwind.config.js
 │   └── index.html
-├── design.md                          # System design document          
+├── design.md                          # System design document
+├── DOCUMENTATION.md                   # Technical documentation
 └── README.md                          # This file
 ```
 
@@ -362,7 +363,7 @@ http://localhost:5000/api/documents
 
 ### Test Scenario: Full CRUD Operations
 
-### Using Postman Collection
+Using Postman Collection
 
 1. Create a new Postman collection
 2. Add 4 requests:
@@ -501,6 +502,6 @@ For issues or questions:
 
 ---
 
-**Version**: 1.0.0  
-**Last Updated**: December 11, 2025  
+**Version**: 1.0.0
+**Last Updated**: December 11, 2025
 **Status**: ✅ Production Ready for Single-User Local Deployment
