@@ -110,11 +110,6 @@ This section explains how to configure PostgreSQL so other developers can run th
 1. Install PostgreSQL
 
 - **Windows (recommended)**: download installer from https://www.postgresql.org/download/windows/ and follow the installer. During install, note the Postgres user (default: `postgres`) and password you set.
-- **Windows (chocolatey)**: if you use Chocolatey, run in an elevated `cmd.exe`:
-
-```bat
-choco install postgresql
-```
 
 - **macOS (Homebrew)**:
 
@@ -548,22 +543,6 @@ Content-Type: multipart/form-data
 Body contains: PDF file binary data
 ```
 
-**cURL (Command Line) Example**:
-
-```bash
-curl -X POST http://localhost:5000/api/documents/upload \
-  -F "file=@/path/to/document.pdf"
-```
-
-**PowerShell Example**:
-
-```powershell
-$file = Get-Item "C:\Documents\patient_report.pdf"
-$form = @{ file = $file }
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/upload" `
-  -Method POST -Form $form
-```
-
 **Postman Steps**:
 
 1. Click "+" to create new request
@@ -635,19 +614,6 @@ Invoke-WebRequest -Uri "http://localhost:5000/api/documents/upload" `
 GET /api/documents
 ```
 
-**cURL Example**:
-
-```bash
-curl http://localhost:5000/api/documents
-```
-
-**PowerShell Example**:
-
-```powershell
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents" `
-  -Method GET | ConvertFrom-Json
-```
-
 **Postman Steps**:
 
 1. Click "+" to create new request
@@ -706,21 +672,6 @@ GET /api/documents/:id
 ```
 
 **Replace `:id` with actual document ID**. For example: `/api/documents/5`
-
-**cURL Example**:
-
-```bash
-# Download document with ID = 5
-curl http://localhost:5000/api/documents/5 --output my_document.pdf
-```
-
-**PowerShell Example**:
-
-```powershell
-# Download document with ID = 5
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/5" `
-  -OutFile "C:\Downloads\my_document.pdf"
-```
 
 **Postman Steps**:
 
@@ -782,21 +733,6 @@ DELETE /api/documents/:id
 
 **Replace `:id` with actual document ID**. For example: `/api/documents/5`
 
-**cURL Example**:
-
-```bash
-# Delete document with ID = 5
-curl -X DELETE http://localhost:5000/api/documents/5
-```
-
-**PowerShell Example**:
-
-```powershell
-# Delete document with ID = 5
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/5" `
-  -Method DELETE
-```
-
 **Postman Steps**:
 
 1. Click "+" to create new request
@@ -847,11 +783,11 @@ Invoke-WebRequest -Uri "http://localhost:5000/api/documents/5" `
 
 Let's follow what happens when Doctor Sarah uploads a blood test PDF:
 
-#### **Scenario: Sarah's Blood Test Upload**
+#### **Scenario: Sarah's Medical Document Upload**
 
-Sarah is a doctor. She has a PDF file on her computer called `blood_test_sarah.pdf` (250KB).
+Sarah is a Patient. She decided to use Healzo to upload her medical document.
 
-#### **Timeline of Upload:**
+#### **Timeline of Upload (Hypothetical):**
 
 **T=0 seconds: Sarah Opens The App**
 
@@ -869,7 +805,7 @@ Sarah is a doctor. She has a PDF file on her computer called `blood_test_sarah.p
 
 **T=5 seconds: Sarah Fills Out Form**
 
-- Enters patient name: "John Doe"
+- Enters patient name: "Sarah"
 - Enters DOB: "1980-05-15"
 - Enters diagnosis: "High cholesterol"
 - Enters allergies: "Penicillin"
