@@ -30,7 +30,6 @@ A full-stack web application for managing patient medical documents (PDFs) with 
 Healzo/
 ├── backend/
 │   ├── routes/
-│   │   ├── testRoute.js
 │   │   └── documentRoutes.js          # Document API endpoints
 │   ├── db.js                          # PostgreSQL connection
 │   ├── index.js                       # Express server
@@ -47,8 +46,7 @@ Healzo/
 │   ├── vite.config.js
 │   ├── tailwind.config.js
 │   └── index.html
-├── design.md                          # System design document
-├── DOCUMENTATION.md                   # Technical documentation
+├── design.md                          # System design document          
 └── README.md                          # This file
 ```
 
