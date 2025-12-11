@@ -106,7 +106,7 @@ export default function PatientDocumentForm({ onSubmit, isLoading }) {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
-              placeholder="e.g., John Doe"
+              placeholder="e.g., Shaik Rahim"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
               required
             />
@@ -163,7 +163,7 @@ export default function PatientDocumentForm({ onSubmit, isLoading }) {
               name="contactNumber"
               value={formData.contactNumber}
               onChange={handleChange}
-              placeholder="e.g., +1-234-567-8900"
+              placeholder="e.g., +91 9876543210"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
             />
           </div>
@@ -177,7 +177,7 @@ export default function PatientDocumentForm({ onSubmit, isLoading }) {
               name="email"
               value={formData.email}
               onChange={handleChange}
-              placeholder="e.g., john@example.com"
+              placeholder="e.g., rs123@gmail.com"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-600 focus:border-transparent"
             />
           </div>
@@ -257,7 +257,7 @@ export default function PatientDocumentForm({ onSubmit, isLoading }) {
               name="allergies"
               value={formData.allergies}
               onChange={handleChange}
-              placeholder="e.g., Penicillin, Peanuts"
+              placeholder="e.g., Penicillin"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-transparent"
             />
           </div>
@@ -329,7 +329,7 @@ export default function PatientDocumentForm({ onSubmit, isLoading }) {
               name="doctorName"
               value={formData.doctorName}
               onChange={handleChange}
-              placeholder="e.g., Dr. Smith, MD"
+              placeholder="e.g., Dr. Ram, MD"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-600 focus:border-transparent"
             />
           </div>
