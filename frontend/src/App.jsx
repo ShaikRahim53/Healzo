@@ -1,7 +1,370 @@
+import { useState, useEffect } from "react";
+import "./App.css";
+
+const API_BASE_URL = "http://localhost:5000/api/documents";
+
 export default function App() {
+  const [documents, setDocuments] = useState([]);
+  const [file, setFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState(""); // 'success' or 'error'
+
+  // Fetch documents on component mount
+  useEffect(() => {
+    const initializeFetch = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch(API_BASE_URL);
+        const data = await response.json();
+
+        if (response.ok) {
+          // support both response shapes: either an array (legacy test route)
+          // or an object { documents: [...] }
+          const rawDocs = Array.isArray(data) ? data : data.documents || [];
+          const sanitized = rawDocs.map((d) => ({
+            ...d,
+            filename: d.filename || "(unnamed)",
+            // normalize filesize (accept strings like "29mb" or numbers)
+            filesize: parseFileSize(d.filesize),
+            created_at: d.created_at || new Date().toISOString(),
+          }));
+          setDocuments(sanitized);
+        } else {
+          showMessage("Failed to fetch documents", "error");
+        }
+      } catch (error) {
+        console.error("Fetch error:", error);
+        showMessage("Error fetching documents", "error");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeFetch();
+  }, []);
+
+  const fetchDocuments = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch(API_BASE_URL);
+      const data = await response.json();
+
+      if (response.ok) {
+        const rawDocs = Array.isArray(data) ? data : data.documents || [];
+        const sanitized = rawDocs.map((d) => ({
+          ...d,
+          filename: d.filename || "(unnamed)",
+          filesize: parseFileSize(d.filesize),
+          created_at: d.created_at || new Date().toISOString(),
+        }));
+        setDocuments(sanitized);
+      } else {
+        showMessage("Failed to fetch documents", "error");
+      }
+    } catch (error) {
+      console.error("Fetch error:", error);
+      showMessage("Error fetching documents", "error");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const showMessage = (msg, type) => {
+    setMessage(msg);
+    setMessageType(type);
+    setTimeout(() => {
+      setMessage("");
+      setMessageType("");
+    }, 4000);
+  };
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+
+    if (selectedFile) {
+      if (selectedFile.type !== "application/pdf") {
+        showMessage("Please select a PDF file", "error");
+        setFile(null);
+        return;
+      }
+
+      if (selectedFile.size > 50 * 1024 * 1024) {
+        showMessage("File size must be less than 50MB", "error");
+        setFile(null);
+        return;
+      }
+
+      setFile(selectedFile);
+    }
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+
+    if (!file) {
+      showMessage("Please select a file to upload", "error");
+      return;
+    }
+
+    try {
+      setUploading(true);
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const response = await fetch(`${API_BASE_URL}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showMessage("Document uploaded successfully", "success");
+        setFile(null);
+        const fileInput = document.getElementById("file-input");
+        if (fileInput) fileInput.value = "";
+        await fetchDocuments();
+      } else {
+        showMessage(data.error || "Failed to upload document", "error");
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      showMessage("Error uploading document", "error");
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleDownload = async (id, filename) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/${id}`);
+
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } else {
+        showMessage("Failed to download document", "error");
+      }
+    } catch (error) {
+      console.error("Download error:", error);
+      showMessage("Error downloading document", "error");
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this document?")) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/${id}`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        showMessage("Document deleted successfully", "success");
+        await fetchDocuments();
+      } else {
+        showMessage(data.error || "Failed to delete document", "error");
+      }
+    } catch (error) {
+      console.error("Delete error:", error);
+      showMessage("Error deleting document", "error");
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    // handle non-numeric gracefully
+    if (bytes === 0) return "0 Bytes";
+    if (bytes == null) return "-";
+    if (typeof bytes !== "number" || !isFinite(bytes)) {
+      // return string representation for unexpected values
+      return String(bytes);
+    }
+
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + " " + sizes[i];
+  };
+
+  // Parse filesize values stored in the DB. Accept numbers or human-friendly strings like "29mb"
+  function parseFileSize(val) {
+    if (val == null) return 0;
+    if (typeof val === "number") return val;
+    const s = String(val).trim().toLowerCase();
+    // try to extract a numeric prefix
+    const num = parseFloat(s.replace(/,/g, ""));
+    if (Number.isNaN(num)) return 0;
+    if (s.includes("kb")) return Math.round(num * 1024);
+    if (s.includes("mb")) return Math.round(num * 1024 * 1024);
+    if (s.includes("gb")) return Math.round(num * 1024 * 1024 * 1024);
+    // if just a number assume bytes
+    return Math.round(num);
+  }
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
-    <div className="h-screen flex items-center justify-center bg-gray-900">
-      <h1 className="text-4xl font-bold text-white">Tailwind is Working! 🚀</h1>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">
+            Medical Document Portal
+          </h1>
+          <p className="text-gray-600">
+            Upload and manage your medical documents safely
+          </p>
+        </div>
+
+        {/* Message Alert */}
+        {message && (
+          <div
+            className={`mb-6 p-4 rounded-lg text-white font-medium ${
+              messageType === "success" ? "bg-green-500" : "bg-red-500"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+
+        {/* Upload Form */}
+        <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Upload Document
+          </h2>
+          <form onSubmit={handleUpload} className="space-y-4">
+            <div>
+              <label
+                htmlFor="file-input"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Select PDF File
+              </label>
+              <input
+                id="file-input"
+                type="file"
+                accept=".pdf"
+                onChange={handleFileChange}
+                className="block w-full text-sm text-gray-500
+                  file:mr-4 file:py-2 file:px-4
+                  file:rounded-lg file:border-0
+                  file:text-sm file:font-semibold
+                  file:bg-indigo-50 file:text-indigo-700
+                  hover:file:bg-indigo-100
+                  cursor-pointer border border-gray-300 rounded-lg p-3"
+              />
+              {file && (
+                <p className="mt-2 text-sm text-green-600">
+                  Selected: {file.name}
+                </p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={uploading || !file}
+              className="w-full bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition duration-200"
+            >
+              {uploading ? "Uploading..." : "Upload Document"}
+            </button>
+          </form>
+        </div>
+
+        {/* Documents List */}
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">
+            Your Documents
+          </h2>
+
+          {loading ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">Loading documents...</p>
+            </div>
+          ) : documents.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">
+                No documents yet. Upload one to get started.
+              </p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b-2 border-gray-200">
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                      Filename
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                      Size
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                      Uploaded
+                    </th>
+                    <th className="text-left py-3 px-4 font-semibold text-gray-700">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {documents.map((doc) => (
+                    <tr
+                      key={doc.id}
+                      className="border-b border-gray-100 hover:bg-gray-50 transition"
+                    >
+                      <td className="py-4 px-4 text-gray-800 font-medium">
+                        {doc.filename}
+                      </td>
+                      <td className="py-4 px-4 text-gray-600">
+                        {formatFileSize(doc.filesize)}
+                      </td>
+                      <td className="py-4 px-4 text-gray-600">
+                        {formatDate(doc.created_at)}
+                      </td>
+                      <td className="py-4 px-4">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleDownload(doc.id, doc.filename)}
+                            className="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition text-sm font-medium"
+                          >
+                            Download
+                          </button>
+                          <button
+                            onClick={() => handleDelete(doc.id)}
+                            className="bg-red-500 text-white py-2 px-4 rounded-lg hover:bg-red-600 transition text-sm font-medium"
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

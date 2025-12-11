@@ -2,7 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
-const testRoute = require("./routes/testRoute");
+const documentRoutes = require("./routes/documentRoutes");
 
 const app = express();
 
@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 // Use the routes
-app.use("/api", testRoute);
+app.use("/api/documents", documentRoutes);
 
 app.get("/", (req, res) => {
   res.send("Backend API is working!");

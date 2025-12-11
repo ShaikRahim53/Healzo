@@ -1,15 +1,11 @@
+// testRoute.js was used during initial testing. It is now a noop placeholder.
 const express = require("express");
 const router = express.Router();
-const pool = require("../db");
 
-router.get("/documents", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT * FROM documents");
-    res.json(result.rows);
-  } catch (error) {
-    console.log("DB ERROR => ", error); // ← add this line
-    res.status(500).json({ error: "Internal Server Error" });
-  }
+router.use((req, res) => {
+  res
+    .status(410)
+    .json({ error: "Deprecated test route - use /api/documents instead" });
 });
 
 module.exports = router;
