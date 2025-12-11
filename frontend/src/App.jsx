@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import PatientDocumentForm from "./PatientDocumentForm";
 import "./App.css";
 
