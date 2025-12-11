@@ -783,9 +783,9 @@ DELETE /api/documents/:id
 
 Let's follow what happens when Doctor Sarah uploads a blood test PDF:
 
-#### **Scenario: Sarah's Medical Document Upload**
+#### **Scenario: Sarah's Blood Test Medical Document Upload**
 
-Sarah is a Patient. She decided to use Healzo to upload her medical document.
+Sarah is a Patient. She decided to use Healzo to upload her blood test medical document.
 
 #### **Timeline of Upload (Hypothetical):**
 
