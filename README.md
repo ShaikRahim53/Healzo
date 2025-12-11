@@ -1,4 +1,4 @@
-# Healzo - Medical Document Portal
+# Healzo - Patient Portal
 
 A full-stack web application for managing patient medical documents (PDFs) with upload, download, and deletion capabilities.
 
