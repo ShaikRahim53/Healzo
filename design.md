@@ -781,7 +781,7 @@ DELETE /api/documents/:id
 
 ### **Complete Upload Process**
 
-Let's follow what happens when Doctor Sarah uploads a blood test PDF:
+Let's follow what happens when Patient Sarah uploads a blood test Medical Document:
 
 #### **Scenario: Sarah's Blood Test Medical Document Upload**
 
