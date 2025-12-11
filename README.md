@@ -232,27 +232,6 @@ http://localhost:5000/api/documents
 
 ### 1. Upload a Document
 
-#### Using cURL
-
-```bash
-# Upload a single PDF file
-curl -X POST http://localhost:5000/api/documents/upload \
-  -F "file=@/path/to/prescription.pdf"
-
-# Example on Windows
-curl -X POST http://localhost:5000/api/documents/upload \
-  -F "file=@C:\Documents\prescription.pdf"
-```
-
-#### Using PowerShell
-
-```powershell
-$filePath = "C:\Documents\prescription.pdf"
-$form = @{file = Get-Item -Path $filePath}
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/upload" `
-  -Method POST -Form $form
-```
-
 #### Using Postman
 
 1. Set method to **POST**
@@ -289,19 +268,6 @@ Invoke-WebRequest -Uri "http://localhost:5000/api/documents/upload" `
 ---
 
 ### 2. List All Documents
-
-#### Using cURL
-
-```bash
-curl -X GET http://localhost:5000/api/documents
-```
-
-#### Using PowerShell
-
-```powershell
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents" `
-  -Method GET | ConvertFrom-Json
-```
 
 #### Using Postman
 
@@ -344,24 +310,6 @@ Invoke-WebRequest -Uri "http://localhost:5000/api/documents" `
 
 ### 3. Download a Document
 
-#### Using cURL
-
-```bash
-# Download document with ID 1
-curl -X GET http://localhost:5000/api/documents/1 \
-  -o downloaded_file.pdf
-
-# The file will be saved as downloaded_file.pdf
-```
-
-#### Using PowerShell
-
-```powershell
-# Download document with ID 1
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/1" `
-  -OutFile "C:\Downloads\prescription.pdf"
-```
-
 #### Using Postman
 
 1. Set method to **GET**
@@ -387,24 +335,6 @@ Invoke-WebRequest -Uri "http://localhost:5000/api/documents/1" `
 ---
 
 ### 4. Delete a Document
-
-#### Using cURL
-
-```bash
-# Delete document with ID 1
-curl -X DELETE http://localhost:5000/api/documents/1
-
-# Verbose output
-curl -v -X DELETE http://localhost:5000/api/documents/1
-```
-
-#### Using PowerShell
-
-```powershell
-# Delete document with ID 1
-Invoke-WebRequest -Uri "http://localhost:5000/api/documents/1" `
-  -Method DELETE | ConvertFrom-Json
-```
 
 #### Using Postman
 
