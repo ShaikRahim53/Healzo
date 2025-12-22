@@ -19,7 +19,7 @@ export default function App() {
     const initializeFetch = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${API_BASE}/api/companies`);
+        const response = await fetch(`${API_BASE}/api/documents`);
         const data = await response.json();
 
         if (response.ok) {
@@ -51,7 +51,7 @@ export default function App() {
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE}/api/companies`);
+      const response = await fetch(`${API_BASE}/api/documents`);
       const data = await response.json();
 
       if (response.ok) {
@@ -116,7 +116,7 @@ export default function App() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`${API_BASE}/api/companies/upload`, {
+      const response = await fetch(`${API_BASE}/api/documents/upload`, {
         method: "POST",
         body: formData,
       });
@@ -142,7 +142,7 @@ export default function App() {
 
   const handleDownload = async (id, filename) => {
     try {
-      const response = await fetch(`${API_BASE}/api/companies/${id}`);
+      const response = await fetch(`${API_BASE}/api/documents/${id}`);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -169,7 +169,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/api/companies/${id}`, {
+      const response = await fetch(`${API_BASE}/api/documents/${id}`, {
         method: "DELETE",
       });
 
@@ -373,7 +373,7 @@ export default function App() {
       const formDataObj = new FormData();
       formDataObj.append("file", pdfBlob, filename);
 
-      const response = await fetch(`${API_BASE}/api/companies/upload`, {
+      const response = await fetch(`${API_BASE}/api/documents/upload`, {
         method: "POST",
         body: formDataObj,
       });
