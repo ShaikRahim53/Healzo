@@ -1,10 +1,11 @@
 // Test script to verify all API endpoints
-const API_BASE_URL = "http://localhost:5000/api/documents";
+
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 async function testGetDocuments() {
   console.log("\n=== Testing GET /documents ===");
   try {
-    const response = await fetch(API_BASE_URL);
+    const response = await fetch(`${API_BASE}/api/documents`);
     const data = await response.json();
     console.log(
       "✓ Successfully fetched documents:",
@@ -21,7 +22,7 @@ async function testGetDocuments() {
 async function testDownloadDocument(documentId, filename) {
   console.log(`\n=== Testing GET /documents/${documentId} (Download) ===`);
   try {
-    const response = await fetch(`${API_BASE_URL}/${documentId}`);
+    const response = await fetch(`${API_BASE}/api/documents/${documentId}`);
     if (response.ok) {
       console.log("✓ Successfully prepared document for download:", filename);
       return true;
@@ -38,7 +39,7 @@ async function testDownloadDocument(documentId, filename) {
 async function testDeleteDocument(documentId) {
   console.log(`\n=== Testing DELETE /documents/${documentId} ===`);
   try {
-    const response = await fetch(`${API_BASE_URL}/${documentId}`, {
+    const response = await fetch(`${API_BASE}/api/documents${documentId}`, {
       method: "DELETE",
     });
     const data = await response.json();
