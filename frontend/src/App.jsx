@@ -3,7 +3,7 @@ import jsPDF from "jspdf";
 import PatientDocumentForm from "./PatientDocumentForm";
 import "./App.css";
 
-const API_BASE_URL = "http://localhost:5000/api/documents";
+const API_BASE = import.meta.env.VITE_API_BASE;
 
 export default function App() {
   const [documents, setDocuments] = useState([]);
@@ -19,7 +19,7 @@ export default function App() {
     const initializeFetch = async () => {
       try {
         setLoading(true);
-        const response = await fetch(API_BASE_URL);
+        const response = await fetch(`${API_BASE}/api/companies`);
         const data = await response.json();
 
         if (response.ok) {
@@ -51,7 +51,7 @@ export default function App() {
   const fetchDocuments = async () => {
     try {
       setLoading(true);
-      const response = await fetch(API_BASE_URL);
+      const response = await fetch(`${API_BASE}/api/companies`);
       const data = await response.json();
 
       if (response.ok) {
@@ -116,7 +116,7 @@ export default function App() {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch(`${API_BASE_URL}/upload`, {
+      const response = await fetch(`${API_BASE}/api/companies/upload`, {
         method: "POST",
         body: formData,
       });
@@ -142,7 +142,7 @@ export default function App() {
 
   const handleDownload = async (id, filename) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/${id}`);
+      const response = await fetch(`${API_BASE}/api/companies/${id}`);
 
       if (response.ok) {
         const blob = await response.blob();
@@ -169,7 +169,7 @@ export default function App() {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/${id}`, {
+      const response = await fetch(`${API_BASE}/api/companies/${id}`, {
         method: "DELETE",
       });
 
@@ -373,7 +373,7 @@ export default function App() {
       const formDataObj = new FormData();
       formDataObj.append("file", pdfBlob, filename);
 
-      const response = await fetch(`${API_BASE_URL}/upload`, {
+      const response = await fetch(`${API_BASE}/api/companies/upload`, {
         method: "POST",
         body: formDataObj,
       });
