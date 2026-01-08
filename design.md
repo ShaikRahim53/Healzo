@@ -1173,11 +1173,11 @@ limits: {
 
 **The Problem If Wrong**:
 
-- Doctor tries to upload JPG image of a blood test
+- Patient tries to upload JPG image of a blood test
 - Server rejects: "Only PDF files are allowed"
 - They have to convert JPG to PDF first (annoying)
 
-**Real-World Impact**: Medium. Some doctors might want to upload images directly.
+**Real-World Impact**: Medium. Some patients might want to upload images directly.
 
 **Future Fix**:
 
@@ -1263,7 +1263,7 @@ ALTER TABLE documents ADD FOREIGN KEY (created_by) REFERENCES users(id);
 
 **The Problem If Wrong**:
 
-- 100 doctors upload files simultaneously
+- 100 patients upload files simultaneously
 - Server gets overwhelmed (slow or crashes)
 - If computer crashes, entire system is down
 
