@@ -1274,10 +1274,10 @@ ALTER TABLE documents ADD FOREIGN KEY (created_by) REFERENCES users(id);
 ```
 Healthcare System (1000 users):
 
-   Doctor 1 ─┐
-   Doctor 2 ─┤
-   Doctor 3 ─┼─→ Load Balancer ─→ Server 1 (healthy)
-   Doctor 4 ─┤                    Server 2 (healthy)
+   Patient 1 ─┐
+   Patient 2 ─┤
+   Patient 3 ─┼─→ Load Balancer ─→ Server 1 (healthy)
+   Patient 4 ─┤                    Server 2 (healthy)
    ...       ─┴─→             Server 3 (down, bypassed)
                                  ↓
                           PostgreSQL Cluster
