@@ -73,6 +73,7 @@ router.get("/", async (req, res) => {
     const query = "SELECT * FROM documents ORDER BY created_at DESC";
     const result = await db.query(query);
 
+    console.log(result);
     res.status(200).json({
       documents: result.rows,
     });

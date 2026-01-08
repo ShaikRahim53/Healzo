@@ -21,7 +21,7 @@ export default function App() {
         setLoading(true);
         const response = await fetch(`${API_BASE}/api/documents`);
         const data = await response.json();
-
+        console.log(data);
         if (response.ok) {
           // support both response shapes: either an array (legacy test route)
           // or an object { documents: [...] }

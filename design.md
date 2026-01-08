@@ -219,7 +219,7 @@ Right now, our app works great for 1-5 people testing it. But if 1,000 doctors a
 
 #### **1. Add User Authentication (CRITICAL)**
 
-**Problem**: Anyone can see all patient documents. A doctor in New York can see a patient in California's records.
+**Problem**: Anyone can see all patient documents. A patient in New York can see a patient in California's records.
 
 **Solution**:
 
@@ -285,17 +285,15 @@ aws.s3.upload(pdfFile, "medical-documents-bucket/");
 
 **Solution**: Use load balancing
 
-```
-Doctor 1 → Load Balancer → Server 1
-Doctor 2 → Load Balancer → Server 2
-Doctor 3 → Load Balancer → Server 3
-Doctor 4 → Load Balancer → Server 1
+Patient 1 → Load Balancer → Server 1
+Patient 2 → Load Balancer → Server 2
+Patient 3 → Load Balancer → Server 3
+Patient 4 → Load Balancer → Server 1
 ...
-```
 
 **Benefits**:
 
-- If Server 1 is busy, Doctor 4 goes to Server 1 which becomes available
+- If Server 1 is busy, Patient 4 goes to Server 1 which becomes available
 - If Server 2 crashes, servers 1 and 3 keep working
 - Can handle 1000s of concurrent users
 
