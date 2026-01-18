@@ -7,9 +7,10 @@ export default function SignUp() {
     <>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-row justify-center items-center bg-red-500 h-[100vh]"
+        className="flex flex-col justify-center items-center h-[100vh]"
       >
-        <div className="SignUp-Container flex h-[70vh] justify-center items-center flex-col gap-3 bg-yellow-500 w-[400px]">
+        <h2 className="heading-2 mb-3 text-2xl">Sign Up</h2>
+        <div className="SignUp-Container shadow-2xl flex h-[70vh] justify-center items-center flex-col gap-3 w-[400px]">
           <div>
             <label className="label block mb-2">Email</label>
             <input
@@ -45,7 +46,7 @@ export default function SignUp() {
           </div>
           <div>
             <button
-              className="button bg-blue-500 w-[300px] text-white shadow-md hover:bg-blue-700 rounded-3xl p-2 p-2"
+              className="button bg-blue-500 w-[300px] text-white shadow-md hover:bg-blue-700 rounded-3xl p-2 mt-4"
               type="button"
               onChange={() => {}}
             >
