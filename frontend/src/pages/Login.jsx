@@ -22,7 +22,7 @@ export default function Login() {
           </div>
           <div className="<button-container mb-4 ml-[20px]">
             <button className="button rounded-[15px] bg-blue-500 hover:bg-blue-600 p-1 px-3 w-[260px] ml-[10px] text-white">
-              Login Up
+              Login
             </button>
           </div>
         </div>
