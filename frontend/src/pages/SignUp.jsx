@@ -42,7 +42,8 @@ export default function SignUp() {
     if (!formData.password) {
       newErrors.password = "Please enter the password";
     } else if (!formData.password.length < 6 || formData.password.length > 15) {
-      newErrors.password = "password is not valid. Check once";
+      newErrors.passwordlength1 = "password must have atleast 6 characters";
+      newErrors.passwordlength2 = "password does not exceed 15 characters";
     }
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = "Please enter the confirm password";
@@ -93,7 +94,9 @@ export default function SignUp() {
                 onChange={handleInputChange}
               ></input>
               {errors.email && (
-                <div className="error text-red-500 ml-2">{errors.email}</div>
+                <div className="error text-red-500 ml-2 text-[14px]">
+                  {errors.email}
+                </div>
               )}
             </div>
             <div>
@@ -107,7 +110,9 @@ export default function SignUp() {
                 onChange={handleInputChange}
               ></input>
               {errors.username && (
-                <div className="error text-red-500 ml-2">{errors.username}</div>
+                <div className="error text-red-500 ml-2 text-[14px]">
+                  {errors.username}
+                </div>
               )}
             </div>
             <div>
@@ -121,7 +126,21 @@ export default function SignUp() {
                 onChange={handleInputChange}
               ></input>
               {errors.password && (
-                <div className="error text-red-500 ml-2">{errors.password}</div>
+                <div className="error text-red-500 ml-2 text-[14px]">
+                  {errors.password}
+                </div>
+              )}
+              {errors.passwordlength1 && errors.passwordlength2 && (
+                <div className="error ml-6">
+                  <ol className="order-list list-disc">
+                    <li className="list-item text-red-500 text-[14px]">
+                      {errors.passwordlength1}
+                    </li>
+                    <li className="list-item text-red-500 text-[14px]">
+                      {errors.passwordlength2}
+                    </li>
+                  </ol>
+                </div>
               )}
             </div>
             <div>
@@ -135,7 +154,7 @@ export default function SignUp() {
                 onChange={handleInputChange}
               ></input>
               {errors.confirmPassword && (
-                <div className="error text-red-500 ml-2">
+                <div className="error text-red-500 ml-2 text-[14px]">
                   {errors.confirmPassword}
                 </div>
               )}
